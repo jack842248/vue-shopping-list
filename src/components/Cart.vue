@@ -8,7 +8,7 @@
                     <p class="text-neutral-500">數量：{{ item.amount }}</p>
                 </div>
                 <div class="flex items-center">
-                    <p class="text-neutral-500 mr-2">${{ item.price.toLocaleString() }}</p>
+                    <p class="text-neutral-500 mr-2">${{ (item.price * item.amount).toLocaleString() }}</p>
                     <button
                         type="button"
                         class="text-red-700 border border-red-700 px-3 py-1 rounded hover:cursor-pointer hover:bg-red-700 hover:text-white"

@@ -1,21 +1,24 @@
 <template>
-    <Transition name="slide-down">
-        <Toast
-            v-if="showToast"
-            :toastMessage="toastMessage"
-            @closeToast="showToast = false">
-        </Toast>
-    </Transition>
+    <div class="fixed fixed top-0 right-0 z-1">
+        <TransitionGroup name="slide-down">
+            <Toast
+                v-for="message in toastMessages"
+                :key="message.id"
+                :toastMessage="message"
+                @closeToast="removeToast(message.id)">
+            </Toast>   
+        </TransitionGroup>
+    </div>
     <div class="m-5">
         <div class="flex flex-row flex-wrap lg:flex-nowrap gap-4">
             <div class="grow">
-                <Product @productData="saveData"></Product>
+                <Product @productData="addToCart"></Product>
             </div>
             <div class="shrink-0 w-full lg:w-1/3">
                 <Cart
                     :cartData="cartData"
                     :totalPrice="totalPrice"
-                    @removeProduct="removeData">
+                    @removeProduct="removeFormCart">
                 </Cart>
             </div>
         </div>
@@ -34,7 +37,7 @@ const props = defineProps(['cartData']);
 const cartData = ref([]);
 
 //接受emit傳來的資料
-const saveData = (item)=> {
+const addToCart = (item)=> {
     const boolean = cartData.value.some((someItem)=>{
         return someItem.title == item.title
     });
@@ -49,7 +52,7 @@ const saveData = (item)=> {
 }
 
 //刪除資料
-const removeData = (product) => {
+const removeFormCart = (product) => {
     cartData.value = cartData.value.filter((item) => {
         return item.id !== product.id
     })
@@ -67,19 +70,27 @@ const totalPrice = computed(()=>{
 });
 
 //通知訊息
-const showToast = ref(false);
-const toastMessage = ref({});
-let toastTimeoutId = null;
-const triggerToast = (messgaeData)=> {
-    if (toastTimeoutId) {
-        clearTimeout(toastTimeoutId);
-    }
-    toastMessage.value = messgaeData;
-    showToast.value = true;
-    toastTimeoutId = setTimeout(()=>{
-        showToast.value = false;
-        toastTimeoutId = null;
+const toastMessages = ref([]);
+const triggerToast = (messageData) => {
+    console.log("接收到",messageData)
+
+    const id = Date.now();
+    toastMessages.value.push({
+        id: id,
+        ...messageData
+    })
+    setTimeout(()=>{
+        toastMessages.value = toastMessages.value.filter((msg)=>{
+            return msg.id !== id 
+        })
     },1500)
+}
+//手動刪除通知訊息
+const removeToast = (id)=> {
+    console.log("刪除訊息",id)
+    toastMessages.value = toastMessages.value.filter(msg => {
+        return msg.id !== id
+    })
 }
 provide('triggerToast', triggerToast);
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[360px] flex justify-between items-center fixed top-0 right-0 text-white bg-emerald-700 rounded shadow-xl p-3 m-3"
+    <div class="w-[360px] flex justify-between items-center text-white bg-emerald-700 rounded shadow-xl p-3 m-3 transition-all"
         :class="toastMessage.type === 'success'?'bg-emerald-700':'bg-red-700'">
         <p class="text-sm">{{ toastMessage.message }}</p>
         <button

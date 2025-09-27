@@ -4,7 +4,7 @@
         <template v-for="item in productData" :key="item">
             <div class="card border-1 border-neutral-200">
                 <div class="card-img-top overflow-hidden">
-                    <img class="transition-transform duration-500 aspect-16/9 object-cover" :src="'images/'+item.photo" alt="商品"/>
+                    <img class="transition-transform duration-500 aspect-16/9 object-cover" :src="'images/'+item.photo" :alt="item.title"/>
                 </div>
                 <div class="bg-white p-3">
                     <div class="text-xl mb-1">{{ item.title }}</div>
